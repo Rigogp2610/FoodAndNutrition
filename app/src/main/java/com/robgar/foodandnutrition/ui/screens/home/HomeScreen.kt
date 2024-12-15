@@ -47,6 +47,7 @@ import coil.compose.AsyncImage
 import com.robgar.foodandnutrition.R
 import com.robgar.foodandnutrition.data.Ingredient
 import com.robgar.foodandnutrition.data.imagePath
+import com.robgar.foodandnutrition.ui.common.LoadingProgressBar
 import com.robgar.foodandnutrition.ui.theme.FoodAndNutritionTheme
 
 @Composable
@@ -90,14 +91,7 @@ fun HomeScreen(onClick: (ingredient: Ingredient) -> Unit, vm: HomeViewModel = vi
                 Log.d("HomeScreen", "screen: ${state.loading} | ${state.ingredients.size}")
 
                 if (state.loading) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(padding),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
+                    LoadingProgressBar(modifier = Modifier.padding(padding))
                 } else {
                     IngredientList(onClick = onClick, vm = vm)
                 }

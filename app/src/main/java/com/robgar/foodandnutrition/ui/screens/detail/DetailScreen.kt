@@ -28,6 +28,7 @@ import coil.compose.AsyncImage
 import com.robgar.foodandnutrition.R
 import com.robgar.foodandnutrition.data.ImageSize
 import com.robgar.foodandnutrition.data.imagePath
+import com.robgar.foodandnutrition.ui.common.LoadingProgressBar
 import com.robgar.foodandnutrition.ui.screens.home.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,14 +56,7 @@ fun DetailScreen(vm: DetailViewModel, onBack: () -> Unit) {
                     .verticalScroll(rememberScrollState())
             ) {
                 if (state.loading) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(padding),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
+                    LoadingProgressBar(modifier = Modifier.padding(padding))
                 }
 
                 state.ingredient?.let { ingredient ->
