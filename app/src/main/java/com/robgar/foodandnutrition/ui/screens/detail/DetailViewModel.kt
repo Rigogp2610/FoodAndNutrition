@@ -7,19 +7,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.robgar.foodandnutrition.data.Ingredient
 import com.robgar.foodandnutrition.data.IngredientsRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class DetailViewModel(private val id: Int) : ViewModel() {
 
     private val repository = IngredientsRepository()
 
-    var state by mutableStateOf(UiState())
-        private set
+    private val _state = MutableStateFlow(UiState())
+    val state get() = _state.asStateFlow()
+
 
     init {
         viewModelScope.launch {
-            state = UiState(loading = true)
-            state = UiState(loading = false, ingredient = repository.fetchInformationOfIngredient(id))
+            _state.value = UiState(loading = true)
+            _state.value = UiState(loading = false, ingredient = repository.fetchInformationOfIngredient(id))
         }
     }
 

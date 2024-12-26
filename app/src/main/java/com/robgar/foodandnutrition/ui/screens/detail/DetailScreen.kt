@@ -19,11 +19,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.robgar.foodandnutrition.R
 import com.robgar.foodandnutrition.data.ImageSize
@@ -35,7 +37,7 @@ import com.robgar.foodandnutrition.ui.screens.home.Screen
 @Composable
 fun DetailScreen(vm: DetailViewModel, onBack: () -> Unit) {
 
-    val state = vm.state
+    val state by vm.state.collectAsStateWithLifecycle()
 
     Screen {
         Scaffold(

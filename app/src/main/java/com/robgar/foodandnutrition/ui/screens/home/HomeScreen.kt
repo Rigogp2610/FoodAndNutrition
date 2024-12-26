@@ -103,10 +103,10 @@ fun HomeScreen(onClick: (ingredient: Ingredient) -> Unit, vm: HomeViewModel = vi
 @Composable
 fun IngredientList(onClick: (ingredient: Ingredient) -> Unit, vm: HomeViewModel) {
     val state by vm.state.collectAsStateWithLifecycle()
-    val listState = rememberLazyGridState()
+    val homeState = rememberHomeState()
 
     LazyVerticalGrid(
-        state = listState,
+        state = homeState.listState,
         columns = GridCells.Adaptive(120.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -122,13 +122,10 @@ fun IngredientList(onClick: (ingredient: Ingredient) -> Unit, vm: HomeViewModel)
         }
     }
 
-    LaunchedEffect(listState) {
-        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
-            .collect { lastVisibleIndex ->
-                if (lastVisibleIndex == state.ingredients.lastIndex) {
-                    vm.searchMoreIngredients()
-                }
-            }
+    homeState.PaginatedList { lastVisibleIndex ->
+        if (lastVisibleIndex == state.ingredients.lastIndex) {
+            vm.searchMoreIngredients()
+        }
     }
 }
 
@@ -167,7 +164,7 @@ fun IngredientItem(ingredient: Ingredient, onClick: () -> Unit) {
 
 @Composable
 fun SearchIngredientTextField(vm: HomeViewModel) {
-    val ingredientName = vm.ingredientName
+    val state by vm.state.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -178,7 +175,7 @@ fun SearchIngredientTextField(vm: HomeViewModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            value = ingredientName.value,
+            value = state.ingredientFilter,
             onValueChange = {
                 Log.d("HomeScreen", "search ingredient: ${it}")
                 vm.searchIngredientsByName(it)

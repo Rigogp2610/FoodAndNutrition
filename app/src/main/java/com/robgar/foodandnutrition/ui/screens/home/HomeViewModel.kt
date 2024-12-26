@@ -11,6 +11,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -21,10 +22,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel : ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
-    val state: StateFlow<UiState> = _state
-
-    var ingredientName = mutableStateOf("")
-        private set
+    val state get() = _state.asStateFlow()
 
     private val searchQuery = MutableStateFlow(IngredientRequest("", 0))
 
@@ -60,9 +58,8 @@ class HomeViewModel : ViewModel() {
 
     fun searchIngredientsByName(ingredientName: String) {
         viewModelScope.launch {
-            this@HomeViewModel.ingredientName.value = ingredientName
             ingredientRequest = IngredientRequest(ingredientName, 0)
-            _state.value = UiState(true)
+            _state.value = UiState(true, ingredientFilter = ingredientName)
             searchQuery.value = ingredientRequest
         }
     }
@@ -76,6 +73,7 @@ class HomeViewModel : ViewModel() {
 
     data class UiState(
         val loading: Boolean = false,
-        val ingredients: List<Ingredient> = emptyList()
+        val ingredients: List<Ingredient> = emptyList(),
+        val ingredientFilter: String = ""
     )
 }

@@ -11,18 +11,29 @@ import com.robgar.foodandnutrition.ui.screens.detail.DetailScreen
 import com.robgar.foodandnutrition.ui.screens.detail.DetailViewModel
 import com.robgar.foodandnutrition.ui.screens.home.HomeScreen
 
+sealed class NavScreen(val route: String) {
+    data object Home : NavScreen("home")
+    data object Detail : NavScreen("detail/{${NavArgs.IngredientId.key}}") {
+        fun createRoute(ingredientId: Int) = "detail/$ingredientId"
+    }
+}
+
+enum class NavArgs(val key: String) {
+    IngredientId("ingredientId")
+}
+
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "home") {
-        composable("home") { HomeScreen(onClick = { ingredient -> navController.navigate("detail/${ingredient.id}") }) }
+    NavHost(navController = navController, startDestination = NavScreen.Home.route) {
+        composable(NavScreen.Home.route) { HomeScreen(onClick = { ingredient -> navController.navigate(NavScreen.Detail.createRoute(ingredient.id)) }) }
 
         composable(
-            "detail/{ingredientId}",
-            arguments = listOf(navArgument("ingredientId") { type = NavType.IntType })
+            NavScreen.Detail.route,
+            arguments = listOf(navArgument(NavArgs.IngredientId.key) { type = NavType.IntType })
         ) { backStackEntry ->
-            val ingredientId = requireNotNull(backStackEntry.arguments?.getInt("ingredientId"))
+            val ingredientId = requireNotNull(backStackEntry.arguments?.getInt(NavArgs.IngredientId.key))
             DetailScreen(
                 viewModel { DetailViewModel(ingredientId) },
                 onBack = {
