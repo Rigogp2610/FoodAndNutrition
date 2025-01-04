@@ -1,7 +1,8 @@
 package com.robgar.foodandnutrition.data
 
-import com.robgar.foodandnutrition.data.remote.ingredient.RemoteEstimatedCost
-import com.robgar.foodandnutrition.data.remote.ingredient.RemoteNutrition
+import com.robgar.foodandnutrition.data.datasource.remote.ingredient.RemoteEstimatedCost
+import com.robgar.foodandnutrition.data.datasource.remote.ingredient.RemoteNutrition
+
 
 data class Ingredient(
     val id: Int,

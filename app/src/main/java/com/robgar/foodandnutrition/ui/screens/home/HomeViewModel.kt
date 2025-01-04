@@ -2,11 +2,14 @@ package com.robgar.foodandnutrition.ui.screens.home
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.robgar.foodandnutrition.data.Ingredient
 import com.robgar.foodandnutrition.data.IngredientsRepository
-import com.robgar.foodandnutrition.data.remote.ingredient.request.IngredientRequest
+import com.robgar.foodandnutrition.data.datasource.IngredientsRemoteDataSource
+import com.robgar.foodandnutrition.data.datasource.remote.ingredient.request.IngredientRequest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +29,7 @@ class HomeViewModel : ViewModel() {
 
     private val searchQuery = MutableStateFlow(IngredientRequest("", 0))
 
-    private val repository = IngredientsRepository()
+    private val repository = IngredientsRepository(IngredientsRemoteDataSource())
 
     private var ingredientRequest = IngredientRequest("", 0)
 
@@ -58,8 +61,9 @@ class HomeViewModel : ViewModel() {
 
     fun searchIngredientsByName(ingredientName: String) {
         viewModelScope.launch {
-            ingredientRequest = IngredientRequest(ingredientName, 0)
-            _state.value = UiState(true, ingredientFilter = ingredientName)
+            val ingredientNameLower = ingredientName.lowercase()
+            ingredientRequest = IngredientRequest(ingredientNameLower, 0)
+            _state.value = UiState(true, ingredientFilter = ingredientNameLower)
             searchQuery.value = ingredientRequest
         }
     }

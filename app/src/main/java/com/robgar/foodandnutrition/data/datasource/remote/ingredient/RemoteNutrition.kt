@@ -1,4 +1,4 @@
-package com.robgar.foodandnutrition.data.remote.ingredient
+package com.robgar.foodandnutrition.data.datasource.remote.ingredient
 
 import kotlinx.serialization.Serializable
 

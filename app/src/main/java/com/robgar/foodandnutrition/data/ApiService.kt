@@ -1,7 +1,7 @@
 package com.robgar.foodandnutrition.data
 
-import com.robgar.foodandnutrition.data.remote.RemoteResult
-import com.robgar.foodandnutrition.data.remote.ingredient.RemoteIngredient
+import com.robgar.foodandnutrition.data.datasource.remote.RemoteResult
+import com.robgar.foodandnutrition.data.datasource.remote.ingredient.RemoteIngredient
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
