@@ -1,16 +1,18 @@
 package com.robgar.foodandnutrition.data.datasource.database.ingredient
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "Ingredient",
-    indices = [androidx.room.Index(value = ["name"], unique = false), androidx.room.Index(value = ["queryTracking"], unique = false)]
+    indices = [Index(value = ["name"], unique = false), Index(value = ["queryTracking"], unique = false), Index(value = ["ingredientId"], unique = true)]
 )
 data class IngredientDB(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
+    val ingredientId: Int,
     val name: String,
     val image: String,
-    val queryTracking: String
+    val queryTracking: String = ""
 )

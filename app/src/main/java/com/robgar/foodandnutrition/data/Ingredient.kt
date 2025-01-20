@@ -6,6 +6,7 @@ import com.robgar.foodandnutrition.data.datasource.remote.ingredient.RemoteNutri
 
 data class Ingredient(
     val id: Int,
+    val ingredientId: Int,
     val name: String,
     val image: String,
     val original: String? = null,
@@ -21,7 +22,8 @@ data class Ingredient(
     val aisle: String? = null,
     val meta: List<String>? = null,
     val nutrition: RemoteNutrition? = null,
-    val categoryPath: List<String>? = null
+    val categoryPath: List<String>? = null,
+    val queryTracking: String = ""
 )
 
 enum class ImageSize(val size: String) {

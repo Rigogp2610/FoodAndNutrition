@@ -2,6 +2,7 @@ package com.robgar.foodandnutrition.data.datasource
 
 import com.robgar.foodandnutrition.data.ApiClient
 import com.robgar.foodandnutrition.data.Ingredient
+import com.robgar.foodandnutrition.data.IngredientMapper.toDomainModel
 import com.robgar.foodandnutrition.data.datasource.remote.ingredient.RemoteIngredient
 
 class IngredientsRemoteDataSource {
@@ -19,24 +20,3 @@ class IngredientsRemoteDataSource {
             .fetchInformationOfIngredient(id, amount)
             .toDomainModel()
 }
-
-private fun RemoteIngredient.toDomainModel(): Ingredient =
-    Ingredient(
-        id,
-        name,
-        image,
-        original,
-        originalName,
-        amount,
-        unit,
-        unitShort,
-        unitLong,
-        possibleUnits,
-        estimatedCost,
-        consistency,
-        shoppingListUnits,
-        aisle,
-        meta,
-        nutrition,
-        categoryPath
-    )

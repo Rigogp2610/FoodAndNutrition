@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">FoodAndNutrition</string>
     <string name="back">Atrás</string>
+    <string name="error">Error</string>
 </resources>

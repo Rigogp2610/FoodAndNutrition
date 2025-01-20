@@ -1,10 +1,11 @@
 package com.robgar.foodandnutrition.data.datasource.remote.ingredient
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class RemoteIngredient(
-    val id: Int,
+    @SerialName("id") val ingredientId: Int,
     val name: String,
     val image: String,
     val original: String? = null,

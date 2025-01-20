@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -17,8 +16,6 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -28,11 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,11 +36,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.robgar.foodandnutrition.R
+import com.robgar.foodandnutrition.Result
 import com.robgar.foodandnutrition.data.Ingredient
 import com.robgar.foodandnutrition.data.imagePath
+import com.robgar.foodandnutrition.ui.common.ErrorText
 import com.robgar.foodandnutrition.ui.common.LoadingProgressBar
 import com.robgar.foodandnutrition.ui.theme.FoodAndNutritionTheme
 
@@ -63,9 +58,9 @@ fun Screen(content: @Composable () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onClick: (ingredient: Ingredient) -> Unit, vm: HomeViewModel = viewModel()) {
+fun HomeScreen(onClick: (ingredient: Ingredient) -> Unit, vm: HomeViewModel) {
 
-    val state by vm.state.collectAsStateWithLifecycle()
+    val state by vm.state.collectAsState()
 
     Screen {
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -88,12 +83,25 @@ fun HomeScreen(onClick: (ingredient: Ingredient) -> Unit, vm: HomeViewModel = vi
             ) {
                 SearchIngredientTextField(vm = vm)
 
-                Log.d("HomeScreen", "screen: ${state.loading} | ${state.ingredients.size}")
+                when (state) {
+                    Result.Loading -> {
+                        LoadingProgressBar(modifier = Modifier.padding(padding))
+                    }
 
-                if (state.loading) {
-                    LoadingProgressBar(modifier = Modifier.padding(padding))
-                } else {
-                    IngredientList(onClick = onClick, vm = vm)
+                    is Result.Error -> {
+                        ErrorText(
+                            error = (state as Result.Error).throwable,
+                            modifier = Modifier.padding(padding)
+                        )
+                    }
+
+                    is Result.Success -> {
+                        IngredientList(
+                            onClick = onClick,
+                            vm = vm,
+                            (state as Result.Success<List<Ingredient>>).data
+                        )
+                    }
                 }
             }
         }
@@ -101,8 +109,11 @@ fun HomeScreen(onClick: (ingredient: Ingredient) -> Unit, vm: HomeViewModel = vi
 }
 
 @Composable
-fun IngredientList(onClick: (ingredient: Ingredient) -> Unit, vm: HomeViewModel) {
-    val state by vm.state.collectAsStateWithLifecycle()
+fun IngredientList(
+    onClick: (ingredient: Ingredient) -> Unit,
+    vm: HomeViewModel,
+    ingredients: List<Ingredient>
+) {
     val homeState = rememberHomeState()
 
     LazyVerticalGrid(
@@ -115,7 +126,7 @@ fun IngredientList(onClick: (ingredient: Ingredient) -> Unit, vm: HomeViewModel)
             .padding(horizontal = 4.dp),
         contentPadding = PaddingValues(8.dp)
     ) {
-        items(state.ingredients) { ingredient ->
+        items(ingredients) { ingredient ->
             IngredientItem(
                 ingredient = ingredient,
                 onClick = { onClick(ingredient) })
@@ -123,9 +134,7 @@ fun IngredientList(onClick: (ingredient: Ingredient) -> Unit, vm: HomeViewModel)
     }
 
     homeState.PaginatedList { lastVisibleIndex ->
-        if (lastVisibleIndex == state.ingredients.lastIndex) {
-            vm.searchMoreIngredients()
-        }
+        vm.searchMoreIngredients(lastVisibleIndex)
     }
 }
 
@@ -164,7 +173,7 @@ fun IngredientItem(ingredient: Ingredient, onClick: () -> Unit) {
 
 @Composable
 fun SearchIngredientTextField(vm: HomeViewModel) {
-    val state by vm.state.collectAsStateWithLifecycle()
+    val ingredientRequest by vm.searchQuery.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -175,7 +184,7 @@ fun SearchIngredientTextField(vm: HomeViewModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            value = state.ingredientFilter,
+            value = ingredientRequest.name,
             onValueChange = {
                 Log.d("HomeScreen", "search ingredient: ${it}")
                 vm.searchIngredientsByName(it)
