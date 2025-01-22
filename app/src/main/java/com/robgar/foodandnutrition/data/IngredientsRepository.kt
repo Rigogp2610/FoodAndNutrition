@@ -2,7 +2,9 @@ package com.robgar.foodandnutrition.data
 
 import android.util.Log
 import com.robgar.foodandnutrition.data.datasource.IngredientsRemoteDataSource
+import com.robgar.foodandnutrition.domain.Ingredient
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 
 class IngredientsRepository(
@@ -25,12 +27,14 @@ class IngredientsRepository(
                 "findIngredientsByPrefix: ingredientsDB -> $ingredientsDB"
             )
             if (ingredientsDB.isEmpty()) {
-                val remoteIngredients = remoteDataSource.searchIngredientsByName(name, number, offset)
+                val remoteIngredients =
+                    remoteDataSource.searchIngredientsByName(name, number, offset)
                 localDataSource.saveIngredients(remoteIngredients, name)
             }
         }
 
-    suspend fun fetchInformationOfIngredient(id: Int, amount: Int = 1): Ingredient =
-        remoteDataSource.fetchInformationOfIngredient(id, amount)
+    fun fetchInformationOfIngredient(id: Int, amount: Int = 1): Flow<Ingredient> = flow {
+        emit(remoteDataSource.fetchInformationOfIngredient(id, amount))
+    }
 
 }

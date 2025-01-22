@@ -1,4 +1,4 @@
-package com.robgar.foodandnutrition.data
+package com.robgar.foodandnutrition.domain
 
 import com.robgar.foodandnutrition.data.datasource.remote.ingredient.RemoteEstimatedCost
 import com.robgar.foodandnutrition.data.datasource.remote.ingredient.RemoteNutrition

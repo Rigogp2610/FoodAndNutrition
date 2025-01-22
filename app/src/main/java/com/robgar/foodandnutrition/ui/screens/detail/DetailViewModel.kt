@@ -1,33 +1,18 @@
 package com.robgar.foodandnutrition.ui.screens.detail
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.robgar.foodandnutrition.data.Ingredient
-import com.robgar.foodandnutrition.data.IngredientsLocalDataSource
+import com.robgar.foodandnutrition.Result
+import com.robgar.foodandnutrition.domain.Ingredient
 import com.robgar.foodandnutrition.data.IngredientsRepository
-import com.robgar.foodandnutrition.data.datasource.IngredientsRemoteDataSource
+import com.robgar.foodandnutrition.stateAsResultIn
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class DetailViewModel(private val repository: IngredientsRepository, private val id: Int) : ViewModel() {
 
-    private val _state = MutableStateFlow(UiState())
-    val state get() = _state.asStateFlow()
-
-
-    init {
-        viewModelScope.launch {
-            _state.value = UiState(loading = true)
-            _state.value = UiState(loading = false, ingredient = repository.fetchInformationOfIngredient(id))
-        }
-    }
-
-    data class UiState(
-        val loading: Boolean = false,
-        val ingredient: Ingredient? = null
-    )
+    val state: StateFlow<Result<Ingredient>> = repository.fetchInformationOfIngredient(id)
+        .stateAsResultIn(viewModelScope)
 }

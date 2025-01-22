@@ -5,6 +5,7 @@ import com.robgar.foodandnutrition.data.IngredientMapper.toDatabase
 import com.robgar.foodandnutrition.data.IngredientMapper.toModel
 import com.robgar.foodandnutrition.data.datasource.database.IngredientsDao
 import com.robgar.foodandnutrition.data.datasource.database.ingredient.IngredientDB
+import com.robgar.foodandnutrition.domain.Ingredient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

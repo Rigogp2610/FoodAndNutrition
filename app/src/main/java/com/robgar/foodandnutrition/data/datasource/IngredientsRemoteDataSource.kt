@@ -1,9 +1,8 @@
 package com.robgar.foodandnutrition.data.datasource
 
 import com.robgar.foodandnutrition.data.ApiClient
-import com.robgar.foodandnutrition.data.Ingredient
+import com.robgar.foodandnutrition.domain.Ingredient
 import com.robgar.foodandnutrition.data.IngredientMapper.toDomainModel
-import com.robgar.foodandnutrition.data.datasource.remote.ingredient.RemoteIngredient
 
 class IngredientsRemoteDataSource {
 

@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.robgar.foodandnutrition.Result
-import com.robgar.foodandnutrition.data.Ingredient
+import com.robgar.foodandnutrition.domain.Ingredient
 import com.robgar.foodandnutrition.data.IngredientsRepository
 import com.robgar.foodandnutrition.data.datasource.remote.ingredient.request.IngredientSearch
 import com.robgar.foodandnutrition.stateAsResultIn

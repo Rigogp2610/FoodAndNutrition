@@ -2,6 +2,7 @@ package com.robgar.foodandnutrition.data
 
 import com.robgar.foodandnutrition.data.datasource.database.ingredient.IngredientDB
 import com.robgar.foodandnutrition.data.datasource.remote.ingredient.RemoteIngredient
+import com.robgar.foodandnutrition.domain.Ingredient
 
 object IngredientMapper {
 
