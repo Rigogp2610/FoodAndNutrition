@@ -13,7 +13,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -33,14 +32,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.robgar.foodandnutrition.R
-import com.robgar.foodandnutrition.domain.ImageSize
-import com.robgar.foodandnutrition.domain.Ingredient
-import com.robgar.foodandnutrition.domain.imagePath
+import com.robgar.foodandnutrition.domain.model.ImageSize
+import com.robgar.foodandnutrition.domain.model.Ingredient
+import com.robgar.foodandnutrition.domain.model.imagePath
 import com.robgar.foodandnutrition.ui.common.FNScaffold
-import com.robgar.foodandnutrition.ui.common.LoadingProgressBar
 import com.robgar.foodandnutrition.ui.screens.home.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -104,15 +101,15 @@ private fun IngredientDetail(ingredient: Ingredient, modifier: Modifier = Modifi
             text = buildAnnotatedString {
                 Property(
                     name = "Proteínas",
-                    value = ingredient.nutrition?.caloricBreakdown?.percentProtein.toString()
+                    value = ingredient.caloricBreakdown?.percentProtein.toString()
                 )
                 Property(
                     name = "Grasas",
-                    value = ingredient.nutrition?.caloricBreakdown?.percentFat.toString()
+                    value = ingredient.caloricBreakdown?.percentFat.toString()
                 )
                 Property(
                     name = "Carbohidratos",
-                    value = ingredient.nutrition?.caloricBreakdown?.percentCarbs.toString()
+                    value = ingredient.caloricBreakdown?.percentCarbs.toString()
                 )
             },
             modifier = Modifier

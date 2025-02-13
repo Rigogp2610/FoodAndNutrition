@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.kotlinAndroid) apply false
     alias(libs.plugins.detekt) version "1.23.6"
+    alias(libs.plugins.org.jetbrains.kotlin.jvm) apply false
 }
 
 subprojects {

@@ -39,8 +39,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.robgar.foodandnutrition.R
 import com.robgar.foodandnutrition.Result
-import com.robgar.foodandnutrition.domain.Ingredient
-import com.robgar.foodandnutrition.domain.imagePath
+import com.robgar.foodandnutrition.domain.model.Ingredient
+import com.robgar.foodandnutrition.domain.model.imagePath
 import com.robgar.foodandnutrition.ui.common.ErrorText
 import com.robgar.foodandnutrition.ui.common.LoadingProgressBar
 import com.robgar.foodandnutrition.ui.theme.FoodAndNutritionTheme

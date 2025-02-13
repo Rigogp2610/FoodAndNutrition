@@ -2,7 +2,7 @@ package com.robgar.foodandnutrition
 
 import android.app.Application
 import androidx.room.Room
-import com.robgar.foodandnutrition.data.datasource.database.FoodAndNutritionDatabase
+import com.robgar.foodandnutrition.framework.database.FoodAndNutritionDatabase
 
 class App : Application() {
 

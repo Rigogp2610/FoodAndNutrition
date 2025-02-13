@@ -7,7 +7,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.robgar.foodandnutrition.Result
-import com.robgar.foodandnutrition.domain.Ingredient
+import com.robgar.foodandnutrition.domain.model.Ingredient
 
 @OptIn(ExperimentalMaterial3Api::class)
 class DetailState(

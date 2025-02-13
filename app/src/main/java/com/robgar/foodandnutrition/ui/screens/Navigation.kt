@@ -9,9 +9,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.robgar.foodandnutrition.App
-import com.robgar.foodandnutrition.data.IngredientsLocalDataSource
-import com.robgar.foodandnutrition.data.IngredientsRepository
-import com.robgar.foodandnutrition.data.datasource.IngredientsRemoteDataSource
+import com.robgar.foodandnutrition.framework.IngredientsLocalDataSource
+import com.robgar.foodandnutrition.data.repository.IngredientsRepository
+import com.robgar.foodandnutrition.framework.IngredientsRemoteDataSource
+import com.robgar.foodandnutrition.domain.repository.IIngredientsRepository
+import com.robgar.foodandnutrition.domain.usecases.FetchInformationOfIngredientUseCase
+import com.robgar.foodandnutrition.domain.usecases.SearchIngredientsByNameUseCase
 import com.robgar.foodandnutrition.ui.screens.detail.DetailScreen
 import com.robgar.foodandnutrition.ui.screens.detail.DetailViewModel
 import com.robgar.foodandnutrition.ui.screens.home.HomeScreen
@@ -32,7 +35,7 @@ enum class NavArgs(val key: String) {
 fun Navigation() {
     val navController = rememberNavController()
     val app = LocalContext.current.applicationContext as App
-    val ingredientsRepository = IngredientsRepository(
+    val ingredientsRepository : IIngredientsRepository = IngredientsRepository(
         IngredientsLocalDataSource(app.db.ingredientsDao()),
         IngredientsRemoteDataSource()
     )
@@ -43,7 +46,7 @@ fun Navigation() {
                 navController.navigate(
                     NavScreen.Detail.createRoute(ingredient.ingredientId)
                 )
-            }, viewModel { HomeViewModel(ingredientsRepository) })
+            }, viewModel { HomeViewModel(SearchIngredientsByNameUseCase(ingredientsRepository)) })
         }
 
         composable(
@@ -53,7 +56,7 @@ fun Navigation() {
             val ingredientId =
                 requireNotNull(backStackEntry.arguments?.getInt(NavArgs.IngredientId.key))
             DetailScreen(
-                viewModel { DetailViewModel(ingredientsRepository, ingredientId) },
+                viewModel { DetailViewModel(FetchInformationOfIngredientUseCase(ingredientsRepository), ingredientId) },
                 onBack = {
                     navController.popBackStack()
                 })

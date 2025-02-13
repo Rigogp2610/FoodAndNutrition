@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.robgar.foodandnutrition.Result
-import com.robgar.foodandnutrition.domain.Ingredient
-import com.robgar.foodandnutrition.data.IngredientsRepository
-import com.robgar.foodandnutrition.data.datasource.remote.ingredient.request.IngredientSearch
+import com.robgar.foodandnutrition.domain.model.Ingredient
+import com.robgar.foodandnutrition.framework.remote.ingredient.request.IngredientSearch
+import com.robgar.foodandnutrition.domain.usecases.SearchIngredientsByNameUseCase
 import com.robgar.foodandnutrition.stateAsResultIn
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 
-class HomeViewModel(private val repository: IngredientsRepository) : ViewModel() {
+class HomeViewModel(private val searchIngredientsByNameUseCase: SearchIngredientsByNameUseCase) : ViewModel() {
 
     private var ingredientSearch = IngredientSearch("", 10, 0)
     private val ingredients : MutableList<Ingredient> = mutableListOf()
@@ -36,7 +36,7 @@ class HomeViewModel(private val repository: IngredientsRepository) : ViewModel()
             .flatMapLatest { ingredientSearch ->
                 Log.d("HomeVM", "flatmaplatest: $ingredientSearch")
                 if (ingredientSearch.name.isNotEmpty()) {
-                    repository.searchIngredientsByName(
+                    searchIngredientsByNameUseCase(
                         name = ingredientSearch.name, number = ingredientSearch.number, offset = ingredientSearch.offset)
                 } else {
                     flow { emit(emptyList<Ingredient>()) }
