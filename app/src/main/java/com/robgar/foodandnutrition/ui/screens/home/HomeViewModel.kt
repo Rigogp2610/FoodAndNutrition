@@ -8,6 +8,7 @@ import com.robgar.foodandnutrition.domain.model.Ingredient
 import com.robgar.foodandnutrition.framework.remote.ingredient.request.IngredientSearch
 import com.robgar.foodandnutrition.domain.usecases.SearchIngredientsByNameUseCase
 import com.robgar.foodandnutrition.stateAsResultIn
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,9 +19,11 @@ import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class HomeViewModel(private val searchIngredientsByNameUseCase: SearchIngredientsByNameUseCase) : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(private val searchIngredientsByNameUseCase: SearchIngredientsByNameUseCase) : ViewModel() {
 
     private var ingredientSearch = IngredientSearch("", 10, 0)
     private val ingredients : MutableList<Ingredient> = mutableListOf()

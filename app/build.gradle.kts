@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -29,6 +30,9 @@ android {
 
         val spoonacularApiKey = properties.getProperty("SPOONACULAR_API_KEY", "")
         buildConfigField("String", "SPOONACULAR_API_KEY", "\"$spoonacularApiKey\"")
+
+        val spoonacularApiUrl = properties.getProperty("SPOONACULAR_API_URL", "")
+        buildConfigField("String", "SPOONACULAR_API_URL", "\"$spoonacularApiUrl\"")
     }
 
     buildTypes {
@@ -80,6 +84,10 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+    implementation(libs.hilt.core)
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

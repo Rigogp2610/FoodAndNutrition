@@ -9,7 +9,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.create
 
-object ApiClient {
+internal class ApiClient(
+    private val apiKey: String,
+    private val apiUrl: String
+) {
 
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(::apiKeyAsQuery)
@@ -20,21 +23,22 @@ object ApiClient {
     }
 
     val instance = Retrofit.Builder()
-        .baseUrl("https://api.spoonacular.com/")
+        .baseUrl(apiUrl)
         .client(okHttpClient)
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()
         .create<ApiService>()
+
+    private fun apiKeyAsQuery(chain: Interceptor.Chain) = chain.proceed(
+        chain
+            .request()
+            .newBuilder()
+            .url(
+                chain.request().url
+                    .newBuilder()
+                    .addQueryParameter("apiKey", apiKey)
+                    .build()
+            ).build()
+    )
 }
 
-private fun apiKeyAsQuery(chain: Interceptor.Chain) = chain.proceed(
-    chain
-        .request()
-        .newBuilder()
-        .url(
-            chain.request().url
-                .newBuilder()
-                .addQueryParameter("apiKey", BuildConfig.SPOONACULAR_API_KEY)
-                .build()
-        ).build()
-)

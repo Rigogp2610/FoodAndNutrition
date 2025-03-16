@@ -3,15 +3,16 @@ package com.robgar.foodandnutrition.framework
 import android.util.Log
 import com.robgar.foodandnutrition.framework.IngredientMapper.toDatabase
 import com.robgar.foodandnutrition.framework.IngredientMapper.toDomain
-import com.robgar.foodandnutrition.data.datasource.IIngredientsLocalDataSource
+import com.robgar.foodandnutrition.data.datasource.IngredientsLocalDataSource
 import com.robgar.foodandnutrition.framework.database.IngredientsDao
 import com.robgar.foodandnutrition.framework.database.ingredient.IngredientDB
 import com.robgar.foodandnutrition.domain.model.Ingredient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class IngredientsLocalDataSource(private val ingredientsDao: IngredientsDao) :
-    IIngredientsLocalDataSource {
+class IngredientsLocalDataSourceImp @Inject constructor(private val ingredientsDao: IngredientsDao) :
+    IngredientsLocalDataSource {
 
     override fun findIngredientsByPrefix(prefix: String, limit: Int, offset: Int) : Flow<List<Ingredient>> =
         ingredientsDao.findIngredientsByPrefix(prefix, limit, offset)

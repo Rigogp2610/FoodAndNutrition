@@ -9,10 +9,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.robgar.foodandnutrition.App
-import com.robgar.foodandnutrition.framework.IngredientsLocalDataSource
-import com.robgar.foodandnutrition.data.repository.IngredientsRepository
-import com.robgar.foodandnutrition.framework.IngredientsRemoteDataSource
-import com.robgar.foodandnutrition.domain.repository.IIngredientsRepository
+import com.robgar.foodandnutrition.framework.IngredientsLocalDataSourceImp
+import com.robgar.foodandnutrition.framework.IngredientsRemoteDataSourceImp
+import com.robgar.foodandnutrition.domain.repository.IngredientsRepository
 import com.robgar.foodandnutrition.domain.usecases.FetchInformationOfIngredientUseCase
 import com.robgar.foodandnutrition.domain.usecases.SearchIngredientsByNameUseCase
 import com.robgar.foodandnutrition.ui.screens.detail.DetailScreen
@@ -34,11 +33,6 @@ enum class NavArgs(val key: String) {
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    val app = LocalContext.current.applicationContext as App
-    val ingredientsRepository : IIngredientsRepository = IngredientsRepository(
-        IngredientsLocalDataSource(app.db.ingredientsDao()),
-        IngredientsRemoteDataSource()
-    )
 
     NavHost(navController = navController, startDestination = NavScreen.Home.route) {
         composable(NavScreen.Home.route) {
@@ -46,7 +40,7 @@ fun Navigation() {
                 navController.navigate(
                     NavScreen.Detail.createRoute(ingredient.ingredientId)
                 )
-            }, viewModel { HomeViewModel(SearchIngredientsByNameUseCase(ingredientsRepository)) })
+            })
         }
 
         composable(
@@ -56,7 +50,6 @@ fun Navigation() {
             val ingredientId =
                 requireNotNull(backStackEntry.arguments?.getInt(NavArgs.IngredientId.key))
             DetailScreen(
-                viewModel { DetailViewModel(FetchInformationOfIngredientUseCase(ingredientsRepository), ingredientId) },
                 onBack = {
                     navController.popBackStack()
                 })

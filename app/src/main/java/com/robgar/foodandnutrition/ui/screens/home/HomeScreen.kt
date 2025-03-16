@@ -35,6 +35,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.robgar.foodandnutrition.R
@@ -58,7 +59,7 @@ fun Screen(content: @Composable () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onClick: (ingredient: Ingredient) -> Unit, vm: HomeViewModel) {
+fun HomeScreen(onClick: (ingredient: Ingredient) -> Unit, vm: HomeViewModel = hiltViewModel()) {
 
     val state by vm.state.collectAsState()
 
