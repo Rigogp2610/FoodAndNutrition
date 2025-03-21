@@ -1,17 +1,18 @@
 package com.robgar.foodandnutrition.data.repository
 
-import com.robgar.foodandnutrition.data.datasource.IIngredientsLocalDataSource
-import com.robgar.foodandnutrition.data.datasource.IIngredientsRemoteDataSource
+import com.robgar.foodandnutrition.data.datasource.IngredientsLocalDataSource
+import com.robgar.foodandnutrition.data.datasource.IngredientsRemoteDataSource
 import com.robgar.foodandnutrition.domain.model.Ingredient
-import com.robgar.foodandnutrition.domain.repository.IIngredientsRepository
+import com.robgar.foodandnutrition.domain.repository.IngredientsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-class IngredientsRepository(
-    private val localDataSource: IIngredientsLocalDataSource,
-    private val remoteDataSource: IIngredientsRemoteDataSource
-) : IIngredientsRepository {
+class IngredientsRepositoryImp @Inject constructor(
+    private val localDataSource: IngredientsLocalDataSource,
+    private val remoteDataSource: IngredientsRemoteDataSource
+) : IngredientsRepository {
 
     override fun searchIngredientsByName(
         name: String,
