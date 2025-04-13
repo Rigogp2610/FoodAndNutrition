@@ -17,3 +17,4 @@ rootProject.name = "FoodAndNutrition"
 include(":app")
 include(":data")
 include(":domain")
+include(":test")

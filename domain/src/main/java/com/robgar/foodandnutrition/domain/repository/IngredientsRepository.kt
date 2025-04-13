@@ -11,5 +11,5 @@ interface IngredientsRepository {
         offset: Int
     ): Flow<List<Ingredient>>
 
-    fun fetchInformationOfIngredient(id: Int, amount: Int): Flow<Ingredient>
+    fun fetchInformationOfIngredient(id: Int, amount: Int = 1): Flow<Ingredient>
 }

@@ -2,12 +2,10 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
 }
 
 android {
-    namespace = "com.robgar.foodandnutrition.data"
+    namespace = "com.robgar.foodandnutrition.test"
     compileSdk = 34
 
     defaultConfig {
@@ -37,15 +35,12 @@ android {
 
 dependencies {
     implementation(project(":domain"))
-    testImplementation(project(":test"))
+    implementation(project(":data"))
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.hilt.android)
-    testImplementation(libs.mockito.kotlin)
-    ksp(libs.hilt.compiler)
-    testImplementation(libs.junit)
+    implementation(libs.kotlinx.coroutines.test)
+    implementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }

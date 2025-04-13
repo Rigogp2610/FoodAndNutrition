@@ -1,12 +1,11 @@
 package com.robgar.foodandnutrition.ui.screens.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.robgar.foodandnutrition.Result
 import com.robgar.foodandnutrition.domain.model.Ingredient
-import com.robgar.foodandnutrition.framework.remote.ingredient.request.IngredientSearch
 import com.robgar.foodandnutrition.domain.usecases.SearchIngredientsByNameUseCase
+import com.robgar.foodandnutrition.framework.remote.ingredient.request.IngredientSearch
 import com.robgar.foodandnutrition.stateAsResultIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,6 +18,7 @@ import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -37,7 +37,7 @@ class HomeViewModel @Inject constructor(private val searchIngredientsByNameUseCa
         _searchQuery
             .debounce(200)
             .flatMapLatest { ingredientSearch ->
-                Log.d("HomeVM", "flatmaplatest: $ingredientSearch")
+                Timber.tag("HomeVM").d("flatmaplatest: $ingredientSearch")
                 if (ingredientSearch.name.isNotEmpty()) {
                     searchIngredientsByNameUseCase(
                         name = ingredientSearch.name, number = ingredientSearch.number, offset = ingredientSearch.offset)
@@ -51,14 +51,14 @@ class HomeViewModel @Inject constructor(private val searchIngredientsByNameUseCa
                 }
                 ingredients.clear()
                 ingredients.addAll(updatedIngredients)
-                Log.d("HomeVM", "currentIngredients: $ingredients \n newIngredient: $it")
+                Timber.tag("HomeVM").d( "currentIngredients: $ingredients \n newIngredient: $it")
                 flow { emit(updatedIngredients) }
             }
             .stateAsResultIn(viewModelScope)
 
 
     fun searchIngredientsByName(ingredientName: String) {
-        Log.d("HomeVM", "searchIngredientsByName: ingredient -> $ingredientName")
+        Timber.tag("HomeVM").d( "searchIngredientsByName: ingredient -> $ingredientName")
         val ingredientNameLower = ingredientName.lowercase()
         ingredients.clear()
         ingredientSearch = ingredientSearch.copy(offset = 0, name = ingredientNameLower, number = 10)
@@ -69,8 +69,8 @@ class HomeViewModel @Inject constructor(private val searchIngredientsByNameUseCa
     fun searchMoreIngredients(lastVisibleIndex: Int) {
         viewModelScope.launch {
             val ingredientsSize = ingredientSearch.number + ingredientSearch.offset
-            Log.d("HomeScreen","next page: lastVisibleIndex -> $lastVisibleIndex | ingredients size -> ${ingredientsSize}")
-            Log.d("HomeScreen","next page: number -> ${ingredientSearch.number} | offset -> ${ingredientSearch.offset}")
+            Timber.tag("HomeVM").d( "next page: lastVisibleIndex -> $lastVisibleIndex | ingredients size -> ${ingredientsSize}")
+            Timber.tag("HomeVM").d( "next page: number -> ${ingredientSearch.number} | offset -> ${ingredientSearch.offset}")
             if (lastVisibleIndex == ingredientsSize || lastVisibleIndex == (ingredientsSize - 1)) {
                 ingredientSearch = ingredientSearch.copy(offset = ingredientSearch.offset + 10)
                 _searchQuery.value = ingredientSearch
